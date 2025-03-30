@@ -13,7 +13,6 @@ import java.util.Random;
 public class Main extends ApplicationAdapter {
 
     ShapeRenderer shape;
-    Random rand = new Random();
     Ball ball;
     Paddle paddle;
     ArrayList<Block> blocks = new ArrayList<>();
@@ -52,14 +51,17 @@ public class Main extends ApplicationAdapter {
         ball.update();
         paddle.update(Gdx.input.getX() - paddle.width/2, Gdx.graphics.getHeight() - 20);
         ball.checkCollision(paddle);
+        // ball-paddle collision
         if (ball.collidesWith(paddle)) {
             int distToPaddleCenter;
             int paddleCenter = paddle.x + paddle.width/2;
             distToPaddleCenter = ball.x - paddleCenter;
-            int bounceEffectForce = 5;
+            int bounceEffectForce = 3;
             double bounceVector = (double) distToPaddleCenter /(paddle.width/2.0) * bounceEffectForce;
             System.out.printf("%d/%f * %d = %f\n", distToPaddleCenter, paddle.width/2.0, bounceEffectForce, bounceVector);
+            if (Math.abs(bounceVector) >= 1) {
             ball.xSpeed = (int)bounceVector;
+            }
         }
         // ball-block collision loop
         for (int i = 0; i < blocks.size(); i++) {
